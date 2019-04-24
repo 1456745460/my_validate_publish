@@ -180,11 +180,13 @@ if(typeof(jQuery)=="undefined"){
 						} else {
 							mydata = $("#" + formId).serialize();
 						}
+						layer.load();
 						$.ajax({
 							url: $("#" + formId).attr("action"),
 							type: $("#" + formId).attr("method"),
 							data: mydata,
 							dataType: "json",
+							async:false,
 							success: function (data) {
 								getAjax(data);
 							},
@@ -192,6 +194,7 @@ if(typeof(jQuery)=="undefined"){
 								console.log("ajax 提交表单报错了! 错误代码:" + XMLHttpRequest.status);
 							}
 						});
+						layer.closeAll('loading');
 					}
 					// 表单 提交
 					else if (ifAjax == false) {
