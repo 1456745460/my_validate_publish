@@ -73,7 +73,7 @@ if(typeof(jQuery)=="undefined"){
 					var t = $(this);
 					layer.closeAll();
 					for (var i = 0; i < myJSON.length; i++) {
-						if (t.attr("id") == myJSON[i].id) {
+						if (t.attr("id") == myJSON[i].id&&myJSON[i].realTime!=false) {
 							var getId = t.attr("id");
 							var val = $("#" + getId).val();
 							eachVali(val, i);
