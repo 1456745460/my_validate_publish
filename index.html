@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>表单校验插件</title>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="layer/layer.js"></script>
+		<script type="text/javascript" src="js/my_validate_1.1.js"></script>
+		<link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+		<script type="text/javascript" src="bootstrap/bootstrap.min.js" ></script>
+	</head>
+	<style>
+		span{
+			color: red;
+		}
+	</style>
+	<body>
+		<form action="192.168.0.28:8080/test/HelloWorld.action" method="post" id="formId">
+			<table class="table table-hover">
+				<tr>
+					<th colspan="2" style="text-align: center;">表单校验插件</th>
+					<th width="200px"></th>
+				</tr>
+				<tr>
+					<td>*用户名：</td>
+					<td><input type="text" class="form-control" id="uname" name="uname" style="width: 233px;"></td>
+					<td><span id="tuname"></span></td>
+				</tr>
+				<tr>
+					<td>*密码：</td>
+					<td><input type="password" class="form-control" id="pswd" name="pswd" style="width: 233px;"></td>
+					<td><span id="tpswd"></span></td>
+				</tr>
+				<tr>
+					<td>*确认密码：</td>
+					<td><input type="password" class="form-control" id="pswd2" style="width: 233px;"></td>
+					<td><span id="tpswd2"></span></td>
+				</tr>
+				<tr>
+					<td>*年龄：</td>
+					<td><input type="text" class="form-control" id="age" name="age" style="width: 233px;"></td>
+					<td><span id="tage"></span></td>
+				</tr>
+				<tr>
+					<td>*性别：</td>
+					<td>
+						<lable class="radio-inline"><input type="radio" id="sex1" name="sex" checked="checked">男</lable>
+						<label class="radio-inline"><input type="radio" id="sex2" name="sex">女</label>
+					</td>
+					<td><span id="tsex"></span></td>
+				</tr>
+				<tr>
+					<td>*简介：</td>
+					<td><textarea class="form-control" id="mainBody" rows="10" cols="30" name="mainBody" style="width: 233px;"></textarea></td>
+					<td><span id="tmainBody"></span></td>
+				</tr>
+			</table>
+			<button class="btn btn-primary" type="button" id="subId">提交</button>
+		</form>
+	</body>
+	<script>
+		function checkJson() {
+			var checkJson = [{
+					id: "uname",
+					tid: "tuname",
+					rules: [{
+						reg: zz.notNull(),
+						tips: "用户名不能为空"
+					}, {
+						longest: "10",
+						shortest: "2",
+						tips: "用户名长度限制在2-10个字符"
+					}]
+				},
+				{
+					id: "pswd",
+					tid: "tpswd",
+					rules: [{
+						reg: zz.notNull(),
+						tips: "密码不能为空"
+					}]
+				}, {
+					id: "pswd2",
+					tid: "tpswd2",
+					rules: [{
+						custom: checkPswd,
+						tips: "两次密码输入不一致"
+					}]
+				}, {
+					id: "age",
+					tid: "tage",
+					rules: [{
+						reg: zz.notNull(),
+						tips: "年龄不能为空"
+					}, {
+						reg: zz.ffzs(),
+						tips: "请输入正确的年龄"
+					}]
+				}, {
+					id: "mainBody",
+					tid: "tmainBody",
+					rules: [{
+						reg: zz.notNull(),
+						tips: "简介不能为空"
+					}, {
+						longest: "10",
+						shortest: "0",
+						tips: "简介长度限制在10个字符以内"
+					}]
+				}
+			];
+			return checkJson;
+		}
+
+		function checkPswd() {
+			if($("#pswd").val() == $("#pswd2").val()) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		// 提交特殊参数
+		function specialData() {
+			var fileData={nihao:"你好"};
+			var circulaterData={woyehao:"我也好"};
+			return {
+				'fileData': JSON.stringify(fileData),
+				'circulaterData': JSON.stringify(circulaterData)
+			};
+		}
+
+		$(function() {
+			$().my_validate({
+				DeveloperMode:true,  // 开发者模式 true/false,可以找到基本配置错误
+				subId: "subId", // 提交按钮 id
+				formId: "formId", // form 表单 id
+				ifAjax: true, // 是否使用ajax 提交 true/false/ 跨域ajax jsonp
+				realTime: true, // 实时 onblur 校验 true/false
+				ifLayer: true, // 是否 使用 layer true/false
+				ifImg: true, // 提示语 是否使用感叹号图标 true/false
+				ImgUrl: "img/error.png", // 感叹号图标url地址
+				AutoScroll:[true,270],  // 第一个不通过校验的文本框，自动滚动到该位置  true/false  ,第二个参数，距离顶部像素
+				submitSpecialData: true // ajax提交时，另外加的特殊参数,true/false   写一个 function specialData(){return {'a':'asd','b':'sdf'}}
+			});
+		});
+	</script>
+</html>
