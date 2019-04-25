@@ -51,7 +51,9 @@ if(typeof(jQuery) == "undefined") {
 				}
 			}
 
-			var myJSON = checkJson();
+			var myJSON = checkJson();  // 获取配置JSON
+			
+			var ScrollCount = 0;  // 开启滚动，默认0
 
 			if(realTime) { // 实时的校验
 				var nowTime = new Date().getTime();
@@ -76,7 +78,6 @@ if(typeof(jQuery) == "undefined") {
 
 			// 检验函数
 			function eachVali(val, i) {
-				var ScrollCount = 0;
 				for(var j = 0; j < myJSON[i].rules.length; j++) {
 
 					// 校验不通过提示函数
@@ -163,6 +164,7 @@ if(typeof(jQuery) == "undefined") {
 				if(ifLayer) {
 					layer.closeAll();
 				}
+				ScrollCount = 0;
 				for(var i = 0; i < myJSON.length; i++) {
 					var getId = myJSON[i].id;
 					var val = $("#" + getId).val();
