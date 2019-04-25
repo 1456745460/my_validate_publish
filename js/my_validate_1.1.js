@@ -13,7 +13,7 @@ if(typeof(jQuery) == "undefined") {
 			var ifAjax = obj["ifAjax"] != undefined ? obj["ifAjax"] : false;
 			var realTime = obj["realTime"] != undefined ? obj["realTime"] : true;
 			var ifLayer = obj["ifLayer"] != undefined ? obj["ifLayer"] : false;
-			var ifImg = obj["ifImg"] != undefined ? obj["ifImg"] : false;
+			var ifImg = obj["ifImg"] != undefined ? obj["ifImg"] : [false,""];
 			var ImgUrl = obj["ImgUrl"] != undefined ? obj["ImgUrl"] : false;
 			var submitSpecialData = obj["submitSpecialData"] != undefined ? obj["submitSpecialData"] : false;
 			var AutoScroll = obj["AutoScroll"] != undefined ? obj["AutoScroll"] : [false, 0];
@@ -45,9 +45,6 @@ if(typeof(jQuery) == "undefined") {
 						alert("没有引入弹出层layer.js,请引入或关闭ifLayer:false");
 						return false;
 					}
-				} else if(typeof(AutoScroll) != 'object') {
-					alert("AutoScroll 参数是一个数组 例如:  AutoScroll:[false,0] ");
-					return false;
 				}
 			}
 
@@ -87,8 +84,8 @@ if(typeof(jQuery) == "undefined") {
 								tipsMore: true
 							});
 						} else {
-							if(ifImg) { // 有图标，加入图标
-								$("#" + myJSON[i].tid).html("<img src='" + ImgUrl + "'>" + str);
+							if(ifImg[0]) { // 有图标，加入图标
+								$("#" + myJSON[i].tid).html("<img src='" + ifImg[1] + "'>" + str);
 							} else {
 								$("#" + myJSON[i].tid).html(str);
 							}
