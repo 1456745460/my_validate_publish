@@ -27,7 +27,7 @@
 	</style>
 
 	<body>
-		<form action="192.168.0.28:8080/test/HelloWorld.action" method="post" id="formId">
+		<form action="http://192.168.0.28:8080/test/HelloWorld.action" method="post" id="formId">
 			<table class="layui-table">
 				<tr>
 					<th colspan="3" style="text-align: center;">表单校验插件示例</th>
@@ -128,10 +128,10 @@
 		// 提交特殊参数
 		function specialData() {
 			var fileData = {
-				nihao: "你好"
+				hello: "你好"
 			};
 			var circulaterData = {
-				woyehao: "我很好"
+				isOk: "我很好"
 			};
 			return {
 				'fileData': JSON.stringify(fileData),
