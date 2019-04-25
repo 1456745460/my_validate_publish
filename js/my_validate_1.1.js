@@ -65,7 +65,7 @@ if(typeof(jQuery) == "undefined") {
 						layer.closeAll();
 					}
 					for(var i = 0; i < myJSON.length; i++) {
-						if(t.attr("id") == myJSON[i].id && myJSON[i].realTime != false) {
+						if(t.attr("id") == myJSON[i].id && myJSON[i].realTime != false) { // 取id，并且判断单个实时校验是否开启
 							var getId = t.attr("id");
 							var val = $("#" + getId).val();
 							eachVali(val, i);
@@ -81,18 +81,18 @@ if(typeof(jQuery) == "undefined") {
 
 					// 校验不通过提示函数
 					function errorTips(str) {
-						if(ifLayer) {
+						if(ifLayer) { // 弹出层提示
 							layer.tips(str, "#" + myJSON[i].id, {
 								tipsMore: true
 							});
 						} else {
-							if(ifImg) {
+							if(ifImg) { // 有图标，加入图标
 								$("#" + myJSON[i].tid).html("<img src='" + ImgUrl + "'>" + str);
 							} else {
 								$("#" + myJSON[i].tid).html(str);
 							}
 						}
-						if(AutoScroll && ScrollCount == 0) {
+						if(AutoScroll && ScrollCount == 0) { // 滚动到第一个校验不通过的位置
 							$("html, body").animate({
 								scrollTop: $("#" + myJSON[i].id).offset().top - obj["AutoScroll"][1]
 							}, 0);
@@ -147,7 +147,11 @@ if(typeof(jQuery) == "undefined") {
 					// 以上情况都不存在,书写有误
 					else {
 						CanSubmit = false;
-						alert("校验json配置错误!!!");
+						if(DeveloperMode) {
+							alert("校验json配置错误!!!");
+						} else {
+							console.log("校验json配置错误!!!");
+						}
 						break;
 					}
 				}
@@ -184,7 +188,11 @@ if(typeof(jQuery) == "undefined") {
 								getAjax(data);
 							},
 							error: function(XMLHttpRequest, textStatus, errorThrown) {
-								console.log("ajax 提交表单报错了! 错误代码:" + XMLHttpRequest.status);
+								if(DeveloperMode) {
+									alert("ajax 提交表单报错了! 错误代码:" + XMLHttpRequest.status);
+								} else {
+									console.log("ajax 提交表单报错了! 错误代码:" + XMLHttpRequest.status);
+								}
 							}
 						});
 					}
@@ -204,7 +212,11 @@ if(typeof(jQuery) == "undefined") {
 								getAjax(data);
 							},
 							error: function(XMLHttpRequest, textStatus, errorThrown) {
-								console.log("ajax 跨域 提交表单报错了! 错误代码:" + XMLHttpRequest.status);
+								if(DeveloperMode) {
+									alert("ajax 跨域 提交表单报错了! 错误代码:" + XMLHttpRequest.status);
+								} else {
+									console.log("ajax 跨域 提交表单报错了! 错误代码:" + XMLHttpRequest.status);
+								}
 							}
 						});
 					}
