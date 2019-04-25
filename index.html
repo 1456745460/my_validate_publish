@@ -13,7 +13,19 @@
 		span {
 			color: red;
 		}
+		
+		.layui-input {
+			width: 380px!important;
+		}
+		
+		.layui-textarea {
+			width: 380px!important;
+		}
+		.layui-btn{
+			width: 200px;
+		}
 	</style>
+
 	<body>
 		<form action="192.168.0.28:8080/test/HelloWorld.action" method="post" id="formId">
 			<table class="layui-table">
@@ -22,31 +34,31 @@
 				</tr>
 				<tr>
 					<td width="100px">*用户名：</td>
-					<td width="240px"><input class="layui-input" type="text" id="uname" name="uname" style="width: 233px;"></td>
+					<td width="240px"><input class="layui-input" type="text" id="uname" name="uname"></td>
 					<td width="200px"><span id="tuname"></span></td>
 				</tr>
 				<tr>
 					<td>*密码：</td>
-					<td><input class="layui-input" type="password" id="pswd" name="pswd" style="width: 233px;"></td>
+					<td><input class="layui-input" type="password" id="pswd" name="pswd"></td>
 					<td><span id="tpswd"></span></td>
 				</tr>
 				<tr>
 					<td>*确认密码：</td>
-					<td><input class="layui-input" type="password" id="pswd2" style="width: 233px;"></td>
+					<td><input class="layui-input" type="password" id="pswd2"></td>
 					<td><span id="tpswd2"></span></td>
 				</tr>
 				<tr>
 					<td>*年龄：</td>
-					<td><input class="layui-input" type="text" id="age" name="age" style="width: 233px;"></td>
+					<td><input class="layui-input" type="text" id="age" name="age"></td>
 					<td><span id="tage"></span></td>
 				</tr>
 				<tr>
 					<td>*简介：</td>
-					<td><textarea class="layui-textarea" id="mainBody" rows="10" cols="30" name="mainBody" style="width: 233px;"></textarea></td>
+					<td><textarea class="layui-textarea" id="mainBody" rows="10" cols="30" name="mainBody"></textarea></td>
 					<td><span id="tmainBody"></span></td>
 				</tr>
 			</table>
-			<button class="layui-btn" type="button" id="subId">提交</button>
+			<center><button class="layui-btn" type="button" id="subId">提交</button></center>
 		</form>
 	</body>
 	<script>
@@ -78,7 +90,17 @@
 						custom: checkPswd,
 						tips: "两次密码输入不一致"
 					}]
-				}, {
+				},{
+					id: "age",
+					tid: "tage",
+					rules: [{
+						reg:zz.notNull(),
+						tips: "年龄不能为空"
+					},{
+						reg:zz.ffzs(),
+						tips:"请输入正确的年龄"
+					}]
+				},{
 					id: "mainBody",
 					tid: "tmainBody",
 					rules: [{
