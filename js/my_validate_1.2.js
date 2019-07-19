@@ -1,6 +1,6 @@
 if (typeof (jQuery) == "undefined") {
-	alert("表单校验插件基于jquery.js,请先引入..");
-};
+	console.log("%c表单校验插件基于jquery.js,请先引入..",'color:blue');
+}
 (function ($) { // 开启沙箱模式
 	$(function () {
 
@@ -11,14 +11,15 @@ if (typeof (jQuery) == "undefined") {
 			var subId = obj["subId"];
 			var formId = obj["formId"];
 			var ifAjax = obj["ifAjax"] != undefined ? obj["ifAjax"] : false;
-			var realTime = obj["realTime"] != undefined ? obj["realTime"] : true;
+			var realTime = obj["realTime"] != undefined ? obj["realTime"] : false;
 			var ifLayer = obj["ifLayer"] != undefined ? obj["ifLayer"] : false;
 			var ifImg = obj["ifImg"] != undefined ? obj["ifImg"] : [false, ""];
 			var submitSpecialData = obj["submitSpecialData"] != undefined ? obj["submitSpecialData"] : false;
 			var AutoScroll = obj["AutoScroll"] != undefined ? obj["AutoScroll"] : [false, 0];
 
 			if (DeveloperMode) {
-				console.log("已经启用开发者模式...");
+				console.log("%c已经启用开发者模式...",'color:blue');
+				console.log("%c正式环境请关闭开发者模式...",'color:blue');
 				if (document.getElementById(subId) == null) {
 					alert("subId配置错误!!!未找到配置的提交按钮id");
 					return false;
@@ -47,17 +48,26 @@ if (typeof (jQuery) == "undefined") {
 				}
 			}
 
-			var myJSON = checkJson(); // 获取配置JSON
+			var myJSON = checkJson();; // 获取配置JSON
 
 			var ScrollCount = 0; // 开启滚动，默认0
 
-			if (realTime) { // 实时的校验
+			if (realTime[0]) { // 实时的校验
 				var nowTime = new Date().getTime();
 				$("#" + formId).addClass('myValidateForm_' + nowTime);
 				for (var i = 0; i < myJSON.length; i++) {
 					$("#" + myJSON[i].id).addClass("vali_" + nowTime);
 				}
-				$(".myValidateForm_" + nowTime + " .vali_" + nowTime).on('blur', function () {
+				var realTimeStr="";
+				if(realTime[1].indexOf('-')>-1){
+					var realTimeArr=realTime[1].split('-');
+				    for(var nn=0;nn<realTimeArr.length;nn++){
+					   realTimeStr+=realTimeArr[nn]+" ";
+				    }
+				}else{
+					realTimeStr=realTime[1];
+				}
+				$(".myValidateForm_" + nowTime + " .vali_" + nowTime).on(realTimeStr, function () {
 					var t = $(this);
 					if (ifLayer) {
 						layer.closeAll();
@@ -105,7 +115,7 @@ if (typeof (jQuery) == "undefined") {
 
 					// 第一种,正则校验
 					if (typeof (myJSON[i].rules[j].reg) != 'undefined') {
-						// 在判断是否为空
+						// 再判断是否为空
 						if (myJSON[i].rules[j].reg.toString() == "/^.+$/") {
 							if (myJSON[i].rules[j].reg.test(val)) {
 								removeHtml();
@@ -134,7 +144,7 @@ if (typeof (jQuery) == "undefined") {
 					}
 					// 第三种,自定义校验
 					else if (typeof (myJSON[i].rules[j].custom) != 'undefined') {
-						if (!myJSON[i].rules[j].custom()) {
+						if (!myJSON[i].rules[j].custom($("#"+myJSON[i].id))) {
 							errorTips(myJSON[i].rules[j].tips);
 							break;
 						} else {
@@ -147,7 +157,7 @@ if (typeof (jQuery) == "undefined") {
 						if (DeveloperMode) {
 							alert("校验json配置错误!!!");
 						} else {
-							console.log("校验json配置错误!!!");
+							console.log("%c校验json配置错误!!!",'color:blue');
 						}
 						break;
 					}
@@ -176,6 +186,9 @@ if (typeof (jQuery) == "undefined") {
 						} else {
 							mydata = $("#" + formId).serialize();
 						}
+						console.log("%c表单提交了如下参数：",'color:blue');
+						console.log(specialData());
+						console.log("%c"+$("#" + formId).serialize(),'color:blue');
 						$.ajax({
 							url: $("#" + formId).attr("action"),
 							type: $("#" + formId).attr("method"),
@@ -189,7 +202,7 @@ if (typeof (jQuery) == "undefined") {
 								if (DeveloperMode) {
 									alert("ajax 提交表单报错了! 错误代码:" + XMLHttpRequest.status);
 								} else {
-									console.log("ajax 提交表单报错了! 错误代码:" + XMLHttpRequest.status);
+									console.log("%cajax 提交表单报错了! 错误代码:" + XMLHttpRequest.status,'color:blue');
 								}
 							}
 						});
@@ -200,10 +213,19 @@ if (typeof (jQuery) == "undefined") {
 					}
 					// 跨域ajax 提交
 					else if (ifAjax == 'jsonp') {
+						var mydata = '';
+						if (submitSpecialData) {
+							mydata = $.param(specialData()) + '&' + $("#" + formId).serialize();
+						} else {
+							mydata = $("#" + formId).serialize();
+						}
+						console.log("%c跨域表单提交了如下参数：",'color:blue');
+						console.log(specialData());
+						console.log("%c"+$("#" + formId).serialize(),'color:blue');
 						$.ajax({
 							url: $("#" + formId).attr("action"),
 							type: "get",
-							data: $("#" + formId).serialize(),
+							data: mydata,
 							dataType: "jsonp",
 							jsonp: "jsoncallback",
 							success: function (data) {
@@ -213,7 +235,7 @@ if (typeof (jQuery) == "undefined") {
 								if (DeveloperMode) {
 									alert("ajax 跨域 提交表单报错了! 错误代码:" + XMLHttpRequest.status);
 								} else {
-									console.log("ajax 跨域 提交表单报错了! 错误代码:" + XMLHttpRequest.status);
+									console.log("%cajax 跨域 提交表单报错了! 错误代码:" + XMLHttpRequest.status,'color:blue');
 								}
 							}
 						});
