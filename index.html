@@ -8,8 +8,7 @@
 		<script type="text/javascript" src="layui/layui.all.js"></script>
 		<script type="text/javascript" src="js/my_validate_1.2.js"></script>
 		<link rel="stylesheet" href="layui/css/layui.css" />
-	</head>
-	<style>
+		<style>
 		span {
 			color: red;
 		}
@@ -23,7 +22,7 @@
 			width: 200px;
 		}
 	</style>
-
+	</head>
 	<body>
 		<form action="http://192.168.0.28:8080/test/HelloWorld.action" method="post" id="formId">
 			<table class="layui-table">
@@ -56,10 +55,15 @@
 					<td><span id="tmainBody"></span></td>
 				</tr>
 			</table>
-			<center><button class="layui-btn" type="button" id="subId">提交</button></center>
+			<center>
+				<button class="layui-btn" type="button" id="subId" submitOrSave='1'>提交</button>  
+				&nbsp;&nbsp;&nbsp;
+				<button class="layui-btn" type="button" id="subId2" submitOrSave='2'>保存</button>
+			</center>
 		</form>
 	</body>
-	<script>
+</html>
+<script>
 		function checkJson() {
 			var checkJson = [{
 					id: "uname",
@@ -140,7 +144,7 @@
 		$(function() {
 			$().my_validate({
 				DeveloperMode: true, // 开发者模式 true/false,可以找到基本配置错误
-				subId: "subId", // 提交按钮 id
+				subId: "subId,subId2", // 提交按钮 id
 				formId: "formId", // form 表单 id
 				ifAjax: true, // 是否使用ajax 提交 true/false/ 跨域ajax jsonp
 				realTime: [true,'blur-input'], // 实时  校验 true/false,多个 使用  - 连接
@@ -151,5 +155,3 @@
 			});
 		});
 	</script>
-
-</html>

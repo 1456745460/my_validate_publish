@@ -9,6 +9,17 @@ if (typeof (jQuery) == "undefined") {
 		$.fn.my_validate = function (obj) {
 			var DeveloperMode = obj["DeveloperMode"] != undefined ? obj["DeveloperMode"] : false;
 			var subId = obj["subId"];
+			if(subId.indexOf(',')!=-1){
+				var arrD=subId.split(',');
+				var str='';
+				for(var nn=0;nn<arrD.length;nn++){
+					str+='#'+arrD[nn]+",";
+				}
+				str=str.substring(0,str.length-1);
+				subId=str;
+			}else{
+				subId="#"+subId;
+			}
 			var formId = obj["formId"];
 			var ifAjax = obj["ifAjax"] != undefined ? obj["ifAjax"] : false;
 			var realTime = obj["realTime"] != undefined ? obj["realTime"] : false;
@@ -20,10 +31,7 @@ if (typeof (jQuery) == "undefined") {
 			if (DeveloperMode) {
 				console.log("%c已经启用开发者模式...",'color:blue');
 				console.log("%c正式环境请关闭开发者模式...",'color:blue');
-				if (document.getElementById(subId) == null) {
-					alert("subId配置错误!!!未找到配置的提交按钮id");
-					return false;
-				} else if (document.getElementById(formId) == null) {
+				if (document.getElementById(formId) == null) {
 					alert("formId配置错误!!未找到配置的form表单id!");
 					return false;
 				} else if ($("#" + formId).attr("method") == undefined || $("#" + formId).attr("method") == "") {
@@ -77,6 +85,7 @@ if (typeof (jQuery) == "undefined") {
 							var getId = t.attr("id");
 							var val = $("#" + getId).val();
 							eachVali(val, i);
+							break;
 						}
 					}
 				})
@@ -110,14 +119,16 @@ if (typeof (jQuery) == "undefined") {
 
 					// 校验通过,如果没用layer 提示,置空校验错误提示
 					function removeHtml() {
-						$("#" + myJSON[i].tid).html("");
+						if(!ifLayer){
+							$("#" + myJSON[i].tid).html("");
+						}
 					}
 
 					// 第一种,正则校验
 					if (typeof (myJSON[i].rules[j].reg) != 'undefined') {
 						// 再判断是否为空
 						if (myJSON[i].rules[j].reg.toString() == "/^.+$/") {
-							if (myJSON[i].rules[j].reg.test(val)) {
+							if (myJSON[i].rules[j].reg.test(val)|| val!="") {
 								removeHtml();
 							} else {
 								errorTips(myJSON[i].rules[j].tips);
@@ -165,7 +176,10 @@ if (typeof (jQuery) == "undefined") {
 			}
 
 			// 点击提交按钮
-			$("#" + subId).on('click', function () {
+			$(subId).on('click', function () {
+				
+				var submitOrSave=$("#"+$(this).attr('id')).attr('submitOrSave');
+				
 				CanSubmit = true;
 				if (ifLayer) {
 					layer.closeAll();
@@ -182,9 +196,9 @@ if (typeof (jQuery) == "undefined") {
 					if (ifAjax) {
 						var mydata = '';
 						if (submitSpecialData) {
-							mydata = $.param(specialData()) + '&' + $("#" + formId).serialize();
+							mydata = $.param(specialData()) + '&' + $("#" + formId).serialize()+'&'+$.param({submitOrSave:submitOrSave});
 						} else {
-							mydata = $("#" + formId).serialize();
+							mydata = $("#" + formId).serialize()+'&'+$.param({submitOrSave:submitOrSave});
 						}
 						console.log("%c表单提交了如下参数：",'color:blue');
 						console.log(specialData());
