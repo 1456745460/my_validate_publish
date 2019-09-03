@@ -27,6 +27,7 @@ if (typeof (jQuery) == "undefined") {
 			var ifImg = obj["ifImg"] != undefined ? obj["ifImg"] : [false, ""];
 			var submitSpecialData = obj["submitSpecialData"] != undefined ? obj["submitSpecialData"] : false;
 			var AutoScroll = obj["AutoScroll"] != undefined ? obj["AutoScroll"] : [false, 0];
+			var confirmSub = obj["confirmSub"] != undefined ? obj["confirmSub"] : [false, "",""];
 
 			if (DeveloperMode) {
 				console.log("%c已经启用开发者模式...",'color:blue');
@@ -98,7 +99,7 @@ if (typeof (jQuery) == "undefined") {
 					// 校验不通过提示函数
 					function errorTips(str) {
 						if (ifLayer) { // 弹出层提示
-							layer.tips(str, "#" + myJSON[i].id, {
+							layer.tips(str, "#" + myJSON[i].tid, {
 								tipsMore: true
 							});
 						} else {
@@ -190,10 +191,57 @@ if (typeof (jQuery) == "undefined") {
 					var val = $("#" + getId).val();
 					eachVali(val, i);
 				}
+				
+				var confirmMsg='';
+				//confirmSub
+				if(submitOrSave=='1'){
+					confirmMsg=confirmSub[1];
+				}else if(submitOrSave=='2'){
+					confirmMsg=confirmSub[2];
+				}
 
 				if (CanSubmit) {
 					// ajax 提交
 					if (ifAjax) {
+						if(confirmSub[0]){
+							layer.confirm(confirmMsg, {
+                        	btn: ['确定','取消'] //按钮
+                        	}, function(){
+                        		ajaxSub();
+                        	},function(){
+                        	});
+						}else{
+							ajaxSub();
+						}
+					}
+					// 表单 提交
+					else if (ifAjax == false) {
+						if(confirmSub[0]){
+							layer.confirm(confirmMsg, {
+                        	btn: ['确定','取消'] //按钮
+                        	}, function(){
+                        		$("#" + formId).submit();
+                        	},function(){
+                        	});
+						}else{
+							$("#" + formId).submit();
+						}
+					}
+					// 跨域ajax 提交
+					else if (ifAjax == 'jsonp') {
+						if(confirmSub[0]){
+							layer.confirm(confirmMsg, {
+                        	btn: ['确定','取消'] //按钮
+                        	}, function(){
+                        		ajaxJsoup();
+                        	},function(){
+                        	});
+						}else{
+							ajaxJsoup();
+						}
+					}
+					
+					function ajaxSub(){
 						var mydata = '';
 						if (submitSpecialData) {
 							mydata = $.param(specialData()) + '&' + $("#" + formId).serialize()+'&'+$.param({submitOrSave:submitOrSave});
@@ -221,12 +269,8 @@ if (typeof (jQuery) == "undefined") {
 							}
 						});
 					}
-					// 表单 提交
-					else if (ifAjax == false) {
-						$("#" + formId).submit();
-					}
-					// 跨域ajax 提交
-					else if (ifAjax == 'jsonp') {
+					
+					function ajaxJsoup(){
 						var mydata = '';
 						if (submitSpecialData) {
 							mydata = $.param(specialData()) + '&' + $("#" + formId).serialize();

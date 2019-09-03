@@ -65,7 +65,9 @@
 </html>
 <script>
 		function checkJson() {
-			var checkJson = [{
+			var checkJson = 
+			[
+				{
 					id: "uname",
 					tid: "tuname",
 					rules: [{
@@ -144,14 +146,15 @@
 		$(function() {
 			$().my_validate({
 				DeveloperMode: true, // 开发者模式 true/false,可以找到基本配置错误
-				subId: "subId,subId2", // 提交按钮 id
+				subId: "subId,subId2", // 提交按钮 id ,多个按钮可以用逗号隔开
 				formId: "formId", // form 表单 id
 				ifAjax: true, // 是否使用ajax 提交 true/false/ 跨域ajax jsonp
 				realTime: [true,'blur-input'], // 实时  校验 true/false,多个 使用  - 连接
 				ifLayer: true, // 是否 使用 layer弹出层校验提示  true/false
 				ifImg: [true,"img/error.png"], // 提示语 是否使用感叹号图标 true/false  感叹号图标url地址  
 				AutoScroll: [true,0], // 第一个不通过校验的文本框，自动滚动到该位置  true/false  ,第二个参数，距离顶部像素
-				submitSpecialData: true // ajax提交时，另外加的特殊参数,true/false   写一个 function specialData(){return {'a':'asd','b':'sdf'}}
+				submitSpecialData: true, // ajax提交时，另外加的特殊参数,true/false   写一个 function specialData(){return {'a':'asd','b':'sdf'}}
+				confirmSub:[true,'确认提交吗？','确认保存吗？']   // 弹出层提示，校验通过后，询问是否提交   submitOrSave=1 confirmSub[1] , submitOrSave=2 confirmSub[2] 
 			});
 		});
 	</script>
