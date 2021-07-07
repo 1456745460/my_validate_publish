@@ -105,7 +105,7 @@ if (typeof(jQuery) == "undefined") {
 							});
 						} else {
 							if (ifImg[0]) { // 有图标，加入图标
-								$("#" + myJSON[i].tid).html("<img src='" + ifImg[1] + "'>" + str);
+								$("#" + myJSON[i].tid).html("<img src='" + ifImg[1] + "'>  " + str);
 							} else {
 								$("#" + myJSON[i].tid).html(str);
 							}
@@ -201,9 +201,6 @@ if (typeof(jQuery) == "undefined") {
 				}
 			}
 
-
-            
-
 			// 点击提交按钮
 			$(subId).on('click', function() {
 
@@ -220,14 +217,7 @@ if (typeof(jQuery) == "undefined") {
 					eachVali(val, i);
 				}
 
-				var confirmMsg = '';
-				//confirmSub
-				if (submitOrSave == '1') {
-					confirmMsg = confirmSub[1];
-				} else if (submitOrSave == '2') {
-					confirmMsg = confirmSub[2];
-				}
-
+				var confirmMsg = confirmSub[parseInt(submitOrSave)];
 				if (CanSubmit) {
 					// ajax 提交
 					if (ifAjax) {
@@ -269,6 +259,7 @@ if (typeof(jQuery) == "undefined") {
 					function ajaxSub() {
 						var mydata = '';
 						if (submitSpecialData) {
+							console.log(specialData());
 							mydata = $.param(specialData()) + '&' + $("#" + formId).serialize() + '&' + $.param({
 								submitOrSave: submitOrSave
 							});
@@ -278,7 +269,6 @@ if (typeof(jQuery) == "undefined") {
 							});
 						}
 						console.log("%c表单提交了如下参数：", 'color:blue');
-						console.log(specialData());
 						console.log("%c" + $("#" + formId).serialize(), 'color:blue');
 						$.ajax({
 							url: $("#" + formId).attr("action"),
@@ -302,12 +292,12 @@ if (typeof(jQuery) == "undefined") {
 					function ajaxJsoup() {
 						var mydata = '';
 						if (submitSpecialData) {
+							console.log(specialData());
 							mydata = $.param(specialData()) + '&' + $("#" + formId).serialize();
 						} else {
 							mydata = $("#" + formId).serialize();
 						}
 						console.log("%c跨域表单提交了如下参数：", 'color:blue');
-						console.log(specialData());
 						console.log("%c" + $("#" + formId).serialize(), 'color:blue');
 						$.ajax({
 							url: $("#" + formId).attr("action"),
